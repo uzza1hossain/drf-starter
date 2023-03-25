@@ -63,6 +63,9 @@ THIRD_PARTY_APPS = [
     "allauth.socialaccount",
     "dj_rest_auth.registration",
     "drf_spectacular",
+    "django_celery_beat",
+    "django_celery_results",
+    "djcelery_email",
 ]
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
 MIDDLEWARE = [
@@ -152,7 +155,12 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "users.CustomUser"
 SITE_ID = 1
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = "djcelery_email.backends.CeleryEmailBackend"
+# CELERY_EMAIL_BACKEND = "djcelery_email.backends.CeleryEmailBackend"
+EMAIL_HOST = "localhost"
+EMAIL_PORT = 1025
+
+
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
     "allauth.account.auth_backends.AuthenticationBackend",
@@ -172,6 +180,7 @@ ACCOUNT_AUTHENTICATION_METHOD = "username_email"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_EMAIL_VERIFICATION_FUNCTION = "core.tasks.send_email_task"
 
 # dj_rest_auth settings
 REST_AUTH = {
@@ -195,3 +204,8 @@ SPECTACULAR_SETTINGS = {
     "SERVE_INCLUDE_SCHEMA": False,
     # OTHER SETTINGS
 }
+
+# celery settings
+CELERY_BROKER_URL = env("CELERY_BROKER_URL", default="redis://localhost:6379/0")  # type: ignore
+CELERY_RESULT_BACKEND = "django-db"
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers.DatabaseScheduler"
