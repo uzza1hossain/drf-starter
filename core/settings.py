@@ -156,7 +156,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "users.CustomUser"
 SITE_ID = 1
 EMAIL_BACKEND = "djcelery_email.backends.CeleryEmailBackend"
-# CELERY_EMAIL_BACKEND = "djcelery_email.backends.CeleryEmailBackend"
 EMAIL_HOST = "localhost"
 EMAIL_PORT = 1025
 
@@ -180,7 +179,6 @@ ACCOUNT_AUTHENTICATION_METHOD = "username_email"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_EMAIL_VERIFICATION_FUNCTION = "core.tasks.send_email_task"
 
 # dj_rest_auth settings
 REST_AUTH = {
@@ -209,3 +207,7 @@ SPECTACULAR_SETTINGS = {
 CELERY_BROKER_URL = env("CELERY_BROKER_URL", default="redis://localhost:6379/0")  # type: ignore
 CELERY_RESULT_BACKEND = "django-db"
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers.DatabaseScheduler"
+CELERY_EMAIL_TASK_CONFIG = {
+    "name": "djcelery_email_send",
+    "ignore_result": False,
+}
