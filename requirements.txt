@@ -29,4 +29,5 @@ faker
 django-coverage-plugin
 django-silk
 django-extensions
+django-debug-toolbar
 
