@@ -7,6 +7,7 @@ django-cors-headers
 django-environ
 drf-spectacular
 psycopg2-binary
+pillow
 django-celery-beat
 django-celery-results
 django-celery-email
@@ -26,3 +27,6 @@ pytest-sugar
 factory_boy
 faker
 django-coverage-plugin
+django-silk
+django-extensions
+
